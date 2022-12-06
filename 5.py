@@ -12,18 +12,18 @@ def move2(crates: List[list], a: int, b: int, c: int):
     crates[b] = crates[b][:-a]
 
 def emulate(crates: List[list], moves: Tuple[tuple], func=move) -> str:
-    "Run the instructions in `moves` and return final element in each sublist"
+    "Run through `instructions` and return final element in each sublist"
     for m in moves:
         func(crates, *m)
     return ''.join(z[-1] for z in crates[1:])
 
 def parse_input() -> Tuple[list]:
-    crates, moves = rc.aoc_in(__file__)[1].split('\n\n')
+    crates, instructions = rc.aoc_in(__file__)[1].split('\n\n')
     crates = crates.splitlines()
     crates = [[]] + [[z[i] for z in crates if z[i] in rc.Uc][::-1]
                      for i in range(1, len(crates[0]), 4)]
-    moves = tuple(map(rc.ints, moves.splitlines()))
-    return crates, moves
+    instructions = tuple(map(rc.ints, instructions.splitlines()))
+    return crates, instructions
 
 print("Part 1:", emulate(*parse_input()))
 print("Part 2:", emulate(*parse_input(), func=move2))
