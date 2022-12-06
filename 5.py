@@ -11,9 +11,9 @@ def move2(crates: List[list], a: int, b: int, c: int):
     crates[c].extend(crates[b][-a:])
     crates[b] = crates[b][:-a]
 
-def emulate(crates: List[list], moves: Tuple[tuple], func=move) -> str:
+def emulate(crates: List[list], instructions: Tuple[tuple], func=move) -> str:
     "Run through `instructions` and return final element in each sublist"
-    for m in moves:
+    for m in instructions:
         func(crates, *m)
     return ''.join(z[-1] for z in crates[1:])
 
