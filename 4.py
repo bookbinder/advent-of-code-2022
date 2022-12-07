@@ -3,11 +3,10 @@ from functools import partial
 from typing import Tuple
 
 def overlap(line: Tuple[int], part2=False) -> bool:
-    """Creates 2 ranges from the tuple of 4 ints and checks for overlap: total
-    overlap in part 1, and at least partial overlap in part 2"""
+    "Creates 2 ranges from the tuple of 4 ints and checks for overlap"
     a = range(line[0], line[1] + 1)
     b = range(line[2], line[3] + 1)
-    if part2:
+    if part2:  # can overlap just partially
         return (a[0] in b) or (b[0] in a)
     return all([z in b for z in a]) or all([z in a for z in b])
 

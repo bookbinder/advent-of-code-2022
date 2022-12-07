@@ -1,7 +1,7 @@
 import rctools as rc
 
 def start_marker(s: str, n: int) -> int:
-    "Returns idx of s after first substring of unique chars of length n"
+    "Returns index of s after cirst substring of unique chars of length n"
     for i in range(len(s) - (n - 1)):
         if len(set(s[i:i + n])) == n:
             return i + n
