@@ -1,22 +1,24 @@
 '''Credit to user 0xdf for the idea.'''
 
 import rctools as rc
+from typing import List
 from collections import defaultdict
 
-def parse_input(input):
+def parse_input(input: List[str]) -> dict:
     "Parse, manage stack, and add size to each dir in the stack"
     sizes = defaultdict(int)
-    cwd = ['/']
+    cwd = ['']
     for line in input:
         match line.split():
-            case ['$', 'cd', '/']:  cwd = ['/']
+            case ['$', 'cd', '/']:  cwd = ['']
             case ['$', 'cd', '..']: cwd.pop()
             case ['$', 'cd', arg]:  cwd.append(arg)
             case ['$', 'ls']:       pass
             case ['dir', arg]:      pass
-            case [a, b]:
+            case [a, _]:
                 for i in range(len(cwd)):
-                    sizes['/'.join(cwd[:i + 1])] += int(a)
+                    dirname = '/'.join(cwd[:i + 1]) or '/'
+                    sizes[dirname] += int(a)
     return sizes
 
 input = rc.aoc_in(__file__)[1].splitlines()
