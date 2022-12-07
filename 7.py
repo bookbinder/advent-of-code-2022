@@ -60,11 +60,6 @@ DISK_SIZE = 70000000
 SPACE_NEEDED = 30000000
 current_free = DISK_SIZE - sizes['/1']
 to_free = SPACE_NEEDED - current_free
-minDiff = float('inf')
-for k, v in sizes.items():
-    if v > to_free and v - to_free < minDiff:
-        to_del = k
-        minDiff = v - to_free
 
 print("Part 1:", sum([v for k, v in sizes.items() if v <= 100000]))
-print("Part 2:", sizes[to_del])
+print("Part 2:", min(v for v in sizes.values() if v > to_free))
