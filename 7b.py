@@ -1,11 +1,11 @@
-'''Credit to user 0xdf for the idea.'''
+'''The idea for this came from user 0xdf.'''
 
 import rctools as rc
 from typing import List
 from collections import defaultdict
 
 def parse_input(input: List[str]) -> dict:
-    "Parse, manage stack, and add size to each dir in the stack"
+    "Parse; update stack; add size to each dir in the stack"
     sizes = defaultdict(int)
     cwd = ['']
     for line in input:
