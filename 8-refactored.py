@@ -1,12 +1,12 @@
-"""Refactored, less repetitive, probably less memory, but takes slower"""
+"""Less repetitive, probably less memory, but slower"""
 
 import rctools as rc
 from math import prod
 
-def up(r, c):    yield from (grid[nr][c] for nr in range(r - 1, -1, -1))
-def down(r, c):  yield from (grid[nr][c] for nr in range(r + 1, R))
-def right(r, c): yield from (grid[r][nc] for nc in range(c + 1, C))
-def left(r, c):  yield from (grid[r][nc] for nc in range(c - 1, -1, -1))
+def up(r, c):    return (grid[nr][c] for nr in range(r - 1, -1, -1))
+def down(r, c):  return (grid[nr][c] for nr in range(r + 1, R))
+def right(r, c): return (grid[r][nc] for nc in range(c + 1, C))
+def left(r, c):  return (grid[r][nc] for nc in range(c - 1, -1, -1))
 
 def is_visible(r: int, c: int):
     "Whether the treetop at r, c can be seen from any direction outside forest"
@@ -17,8 +17,7 @@ def is_visible(r: int, c: int):
 
 def viewing_dist(r: int, c: int, dir) -> int:
     "Viewing distance along the dir"
-    return next((i + 1
-                 for i, v in enumerate(dir(r, c)) if v >= grid[r][c]),
+    return next((i for i, v in enumerate(dir(r, c), 1) if v >= grid[r][c]),
                  len(list(dir(r, c))))
 
 def scenic_score(r: int, c: int) -> int:
