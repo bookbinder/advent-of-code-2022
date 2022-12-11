@@ -1,17 +1,15 @@
-'''with credit to user wooledge/greg'''
+'''With credit to user wooledge/greg'''
 import rctools as rc
 
 def run(n: int) -> int:
-    seen = {(0, 0)}
-    knots = [(0, 0) for _ in range(n)]
+    "Run through the instructions with `n` number of knots"
 
     def move(hi: int, ti: int, dir=None):
-        "Move knots[hi] and knots[ti]"
-        nonlocal knots
+        "Update knots[hi] and knots[ti]"
         hr, hc = knots[hi]
         tr, tc = knots[ti]
 
-        # move head
+        # move head if dir is given
         hr += 1 if dir == 'D' else -1 if dir == 'U' else 0
         hc += 1 if dir == 'R' else -1 if dir == 'L' else 0
 
@@ -26,12 +24,13 @@ def run(n: int) -> int:
             tr += 1 if hr - tr >= 1 else -1
             tc += 1 if hc - tc >= 1 else -1
 
-        # update knots and add pos of tail
+        # update knots and remember position of tail
         knots[hi] = [hr, hc]
         knots[ti] = [tr, tc]
         seen.add(tuple(knots[-1]))
 
-    # run through the instructions, calling move()
+    seen = set()
+    knots = [(0, 0) for _ in range(n)]
     for line in input:
         dir, amt = line.split()
         for i in range(int(amt)):
