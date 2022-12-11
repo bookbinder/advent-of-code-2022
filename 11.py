@@ -14,7 +14,7 @@ def run(part2=False):
     def parse(monkey):
         lines = monkey.splitlines()
         id = rc.ints(lines[0])[0]
-        items = deque(rc.ints(lines[1]))
+        items = rc.ints(lines[1])
         op = lines[2].split()[-2:]
         test = rc.ints(' '.join(lines[3:]))
         return Monkey(id, items, op, test)
@@ -38,7 +38,7 @@ def run(part2=False):
     monkeys = list(map(parse, input))
     counts = {m.id: 0 for m in monkeys}
 
-    for _ in range([20, 10000][part2]):
+    for _ in range(10000 if part2 else 20):
         for m in monkeys:
             turn(m)
     return prod(sorted(counts.values())[-2:])

@@ -8,11 +8,9 @@ def run(n: int) -> int:
         "Update knots[hi] and knots[ti]"
         hr, hc = knots[hi]
         tr, tc = knots[ti]
-
         # move head if dir is given
         hr += 1 if dir == 'D' else -1 if dir == 'U' else 0
         hc += 1 if dir == 'R' else -1 if dir == 'L' else 0
-
         # move tail if necessary
         if abs(tr - hr) <= 1 and abs(tc - hc) <= 1:
             pass
@@ -23,12 +21,12 @@ def run(n: int) -> int:
         elif abs(hr - tr) > 1 or abs(hc - tc) > 1:
             tr += 1 if hr - tr >= 1 else -1
             tc += 1 if hc - tc >= 1 else -1
-
         # update knots and remember position of tail
         knots[hi] = [hr, hc]
         knots[ti] = [tr, tc]
         seen.add(tuple(knots[-1]))
 
+    # run through the instructions, calling move() for each line and knot
     seen = set()
     knots = [(0, 0) for _ in range(n)]
     for line in input:
