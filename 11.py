@@ -1,7 +1,7 @@
 import rctools as rc
 from operator import add, mul
 from math import prod
-from collections import deque, defaultdict
+from collections import deque
 
 class Monkey:
     def __init__(self, id, items, op, test):
@@ -36,7 +36,7 @@ def run(part2=False):
 
     input = rc.aoc_in(__file__)[1].split('\n\n')
     monkeys = list(map(parse, input))
-    counts = defaultdict(int)
+    counts = {m.id: 0 for m in monkeys}
 
     for _ in range([20, 10000][part2]):
         for m in monkeys:
