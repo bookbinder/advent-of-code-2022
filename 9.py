@@ -1,11 +1,12 @@
 '''with credit to user wooledge/greg'''
 import rctools as rc
 
-def run(n):
+def run(n: int) -> int:
     seen = {(0, 0)}
     knots = [(0, 0) for _ in range(n)]
 
-    def move(hi, ti, dir=None, amt=None):
+    def move(hi: int, ti: int, dir=None):
+        "Move knots[hi] and knots[ti]"
         nonlocal knots
         hr, hc = knots[hi]
         tr, tc = knots[ti]
@@ -34,7 +35,7 @@ def run(n):
     for line in input:
         dir, amt = line.split()
         for i in range(int(amt)):
-            move(0, 1, dir, amt)
+            move(0, 1, dir)
             for j in range(1, len(knots) - 1):
                 move(j, j + 1)
     return len(seen)
