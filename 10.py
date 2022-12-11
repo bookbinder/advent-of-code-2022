@@ -9,10 +9,10 @@ def run(s: str, x=1):
             yield x
             x += int(line.split()[1])
 
-def part1(w=40) -> int:
+def part1():
     return sum(i * x for i, x in enumerate(run(input), 1) if i % w == 20)
 
-def part2(w=40) -> list:
+def part2():
     "Each cycle, update a pixel based on overlap"
     G = [['?' for _ in range(w)] for _ in range(6)]
     for i, x in enumerate(run(input)):
@@ -20,6 +20,7 @@ def part2(w=40) -> list:
     return G
 
 input = rc.aoc_in(__file__)[1]
+w = 40
 print("Part 1:", part1())
 print("Part 2:")
 p2 = part2()
