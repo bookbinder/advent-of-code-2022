@@ -38,17 +38,10 @@ def run(part2=False):
     monkeys = list(map(parse, input))
     counts = defaultdict(int)
 
-    if not part2:
-        for _ in range(20):
-            for m in monkeys:
-                turn(m)
-        return prod(sorted(counts.values())[-2:])
-
-    elif part2:
-        for _ in range(10000):
-            for m in monkeys:
-                turn(m)
-        return prod(sorted(counts.values())[-2:])
+    for _ in range([20, 10000][part2]):
+        for m in monkeys:
+            turn(m)
+    return prod(sorted(counts.values())[-2:])
 
 print("Part 1:", run())
 print("Part 2:", run(part2=True))
