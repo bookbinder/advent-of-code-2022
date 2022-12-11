@@ -21,3 +21,12 @@ def aoc_in(day: str) -> Tuple[str]:
     p2 = Path(f'data/{day}.txt')
     p2 = p2.read_text() if p2.exists() else ""
     return p1, p2
+
+def flatten(items):
+    from typing import Iterable
+    for x in items:
+        if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
+            yield from flatten(x)
+        else:
+            yield x
+

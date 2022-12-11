@@ -10,8 +10,8 @@ def left(r, c):  yield from reversed(GRID[r][:c])
 def is_visible(pt: Tuple[int]):
     "Whether the treetop at r, c can be seen from any direction outside forest"
     r, c = pt
-    for f in DIRS:
-        if all(z < GRID[r][c] for z in f(r, c)):
+    for dir in DIRS:
+        if all(z < GRID[r][c] for z in dir(r, c)):
             return True
     return False
 
