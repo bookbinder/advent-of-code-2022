@@ -10,21 +10,18 @@ G[S[0]][S[1]] = 'a'
 G[E[0]][E[1]] = 'z'
 
 def bfs(start):
-    seen = {}
-    q = deque([[start, [start]]])
+    seen = {tuple(S)}
+    q = deque([[start, 0]])
     while q:
-        pt, path = q.popleft()
+        pt, steps = q.popleft()
         r, c = pt
         if pt == E:
-            return len(path) - 1
-        if tuple(pt) in seen and seen[tuple(pt)] <= len(path):
-            continue
-        else:
-            seen[tuple(pt)] = len(path)
+            return steps
         for child in rc.neighbors4(pt, R, C):
             nr, nc = child
-            if ord(G[nr][nc]) <= ord(G[r][c]) + 1 and list(child) not in path:
-                q.append((list(child), path + [list(child)]))
+            if ord(G[nr][nc]) <= ord(G[r][c]) + 1 and child not in seen:
+                seen.add(child)
+                q.append((list(child), steps + 1))
     return float('inf')
 
 starts = [z for z in COR if G[z[0]][z[1]] == 'a']
