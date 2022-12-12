@@ -30,3 +30,8 @@ def flatten(items):
         else:
             yield x
 
+def neighbors4(pt, R=float('inf'), C=float('inf')):
+    r, c = pt
+    return [(r + dr, c + dc) for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1))
+            if 0 <= r + dr < R and 0 <= c + dc < C]
+
