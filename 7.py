@@ -1,65 +1,32 @@
-'''first attempt, not the best or most efficient'''
+'''With credit to user 0xdf.'''
 
 import rctools as rc
-import itertools as it
+from typing import List
+from collections import defaultdict
 
-def parse_input(input):
-    "Return a nested dictionary of file and directory names/sizes"
-    fs = {'/': {}}
-    cwd = ['/']
+def parse_input(input: List[str]) -> dict:
+    "Parse; update stack; add size to each dir in the stack"
+    sizes = defaultdict(int)
+    cwd = ['']
     for line in input:
         match line.split():
-            case ['$', 'cd', '/']:
-                cwd = ['/']
-                curr = fs['/']
-            case ['$', 'cd', '..']:
-                cwd.pop()
-                curr = fs
-                for dir in cwd:
-                    curr = curr[dir]
-            case ['$', 'cd', arg]:
-                cwd.append(arg)
-                curr = fs
-                for dir in cwd:
-                    curr = curr[dir]
-            case ['$', 'ls']:
-                pass
-            case ['dir', arg]:
-                curr[arg] = {}
-            case [a, b]:
-                curr[b] = int(a)
-    return fs
-
-def size_of_dir(node):
-    "Total size of the given dir"
-    total = 0
-    def dfs(node):
-        nonlocal total
-        for k, v in node.items():
-            if isinstance(v, int):
-                total += v
-            else:
-                dfs(node[k])
-    dfs(node)
-    return total
-
-sizes = {}
-ctr = it.count(1)  # to ensure a unique name for each dir
-def all_sizes(node):
-    "Find all dirs and make dictionary of their sizes"
-    for k, v in node.items():
-        if isinstance(v, dict):
-            sizes[k + str(next(ctr))] = size_of_dir(v)
-            all_sizes(node[k])
+            case ['$', 'cd', '/']:  cwd = ['']
+            case ['$', 'cd', '..']: cwd.pop()
+            case ['$', 'cd', arg]:  cwd.append(arg)
+            case ['$', 'ls']:       pass
+            case ['dir', arg]:      pass
+            case [a, _]:
+                for i in range(len(cwd)):
+                    dirname = '/'.join(cwd[:i + 1]) or '/'
+                    sizes[dirname] += int(a)
     return sizes
 
 input = rc.aoc_in(__file__)[1].splitlines()
-fs = parse_input(input)
-sizes = all_sizes(fs)
+sizes = parse_input(input)
 DISK_SIZE = 70000000
 SPACE_NEEDED = 30000000
-current_free = DISK_SIZE - sizes['/1']
+current_free = DISK_SIZE - sizes['/']
 to_free = SPACE_NEEDED - current_free
 
-print("Part 1:", sum([v for k, v in sizes.items() if v <= 100000]))
+print("Part 1:", sum(v for v in sizes.values() if v <= 100000))
 print("Part 2:", min(v for v in sizes.values() if v > to_free))
