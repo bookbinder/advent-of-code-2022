@@ -29,6 +29,7 @@ abyss = max(int(z[0]) for subl in input for z in subl) + 1
 blocked = set()
 for line in input:
     for a, b in it.pairwise(line):
+        #  now draw the line segment (delta r or delta c will be 0)
         for r in range(min(a[0], b[0]), max(a[0], b[0]) + 1):
             for c in range(min(a[1], b[1]), max(a[1], b[1]) + 1):
                 blocked.add((r, c))
