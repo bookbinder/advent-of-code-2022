@@ -8,7 +8,7 @@ def adj(pt):
             (a, b, c + 1), (a, b, c - 1))
 
 def outer_fill():
-    "All points between outer bounds and object's edge"
+    "BFS traverse all points between outer boundary and object's edge"
     seen = set()
     q = deque([(xmin, ymin, zmin)])
     while q:
@@ -22,14 +22,14 @@ def outer_fill():
             q.append(neighbor)
     return seen
 
-blocks = frozenset(map(rc.ints, rc.aoc_in(__file__)[1].splitlines()))
-xmin = min(z[0] for z in blocks) - 1
-xmax = max(z[0] for z in blocks) + 1
-ymin = min(z[1] for z in blocks) - 1
-ymax = max(z[1] for z in blocks) + 1
-zmin = min(z[2] for z in blocks) - 1
-zmax = max(z[2] for z in blocks) + 1
-outer = outer_fill()
+blocks = set(map(rc.ints, rc.aoc_in(__file__)[1].splitlines()))
+xmin   = min(z[0] for z in blocks) - 1
+xmax   = max(z[0] for z in blocks) + 1
+ymin   = min(z[1] for z in blocks) - 1
+ymax   = max(z[1] for z in blocks) + 1
+zmin   = min(z[2] for z in blocks) - 1
+zmax   = max(z[2] for z in blocks) + 1
+outer  = outer_fill()
 
-print("Part 1:", sum(1 for pt in blocks for z in adj(pt) if z not in blocks))
-print("Part 2:", sum(1 for pt in blocks for z in adj(pt) if z in outer))
+print("Part 1:", sum(z not in blocks for pt in blocks for z in adj(pt)))
+print("Part 2:", sum(z in outer for pt in blocks for z in adj(pt)))
