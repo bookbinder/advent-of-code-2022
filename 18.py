@@ -8,7 +8,7 @@ def adj(pt):
             (a, b, c + 1), (a, b, c - 1))
 
 def outer_fill():
-    "BFS traverse all points between outer boundary and object's edge"
+    "BFS return set of points between given outer boundary and object's edge"
     seen = set()
     q = deque([(xmin, ymin, zmin)])
     while q:
