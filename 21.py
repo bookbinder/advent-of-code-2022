@@ -10,9 +10,9 @@ def parse(line):
     return k, [ops[v[1]], v[0], v[2]]
 
 def dfs(node):
-    if isinstance(m[node], int):
-        return m[node]
-    return m[node][0](dfs(m[node][1]), dfs(m[node][2]))
+    match m[node]:
+        case [op, a, b]: return op(dfs(a), dfs(b))
+        case num: return num
 
 def part2():
     "Binary search for correct value of m['humn']"
@@ -27,7 +27,7 @@ def part2():
             hi = mid
     return lo
 
-input = rc.aoc_in(__file__)[0].splitlines()
+input = rc.aoc_in(__file__)[1].splitlines()
 m = dict(map(parse, input))
 print("Part 1:", int(dfs('root')))
 print("Part 2:", part2())
