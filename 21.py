@@ -1,5 +1,5 @@
 import rctools as rc
-from operator import add, sub, mul, truediv
+from operator import add, sub, mul, truediv, gt, lt
 
 def parse(line):
     ops = {'+': add, '-': sub, '*': mul, '/': truediv}
@@ -15,18 +15,19 @@ def dfs(node):
     return m[node][0](dfs(m[node][1]), dfs(m[node][2]))
 
 def part2():
-    "Binary search for right value of m['humn']"
+    "Binary search for correct value of m['humn']"
+    op = gt if dfs(m['root'][1]) - dfs(m['root'][2]) > 0 else lt
     hi = int(1e15)
     lo = int(-1e15)
     while lo < hi:
         mid = m['humn'] = (lo + hi) // 2
-        if dfs(m['root'][1]) - dfs(m['root'][2]) > 0:
+        if op(dfs(m['root'][1]), dfs(m['root'][2])):
             lo = mid + 1
         else:
             hi = mid
     return lo
 
-input = rc.aoc_in(__file__)[1].splitlines()
+input = rc.aoc_in(__file__)[0].splitlines()
 m = dict(map(parse, input))
 print("Part 1:", int(dfs('root')))
 print("Part 2:", part2())
