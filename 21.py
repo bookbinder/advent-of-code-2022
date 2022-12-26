@@ -11,8 +11,10 @@ def parse(line):
 
 def dfs(node):
     match m[node]:
-        case [op, a, b]: return op(dfs(a), dfs(b))
-        case num: return num
+        case [op, a, b]:
+            return op(dfs(a), dfs(b))
+        case num:
+            return num
 
 def part2():
     "Binary search for correct value of m['humn']"
