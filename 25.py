@@ -5,12 +5,10 @@ def from_snafu(s):
     return sum(vals[c] * 5 ** i for i, c in enumerate(reversed(s)))
 
 def to_snafu(num):
-    vals = {4: '-', 3: '=', 2: '2', 1: '1', 0: '0'}
     total = ""
     while num:
-        a = vals[num % 5]
-        num //= 5
-        num += (a in '-=')
+        a = "012=-"[num % 5]
+        num = num // 5 + (a in '-=')
         total = a + total
     return total
 
