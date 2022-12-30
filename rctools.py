@@ -35,3 +35,5 @@ def neighbors4(pt, R=float('inf'), C=float('inf')):
     return [(r + dr, c + dc) for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1))
             if 0 <= r + dr < R and 0 <= c + dc < C]
 
+def ad(a, b):
+    return [x + y for x, y in zip(a, b)]
