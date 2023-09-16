@@ -3,6 +3,9 @@ import itertools as it
 from copy import deepcopy
 
 def falling(blocked, part2=False, r=0, c=500):
+    """Emulates the path of a falling object until it comes to rest. Return
+    True if it will never come to rest (Part 1) or if it is blocked at the
+    start (Part 2)"""
     if r > abyss or (0, 500) in blocked:
         return True
     while (r + 1, c) not in blocked and r < abyss:
