@@ -369,3 +369,8 @@ integer format."
       (if (stringp contents)
 	  (setq contents (funcall fn contents))
 	  (setq contents (funcall #'mapcar fn contents))))))
+
+(defun 2d-list-to-2d-array (L)
+  "Convert a 2d list to a 2d array."
+  (make-array (list (length L) (length (first L)))
+	      :initial-contents L))
