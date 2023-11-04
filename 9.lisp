@@ -31,7 +31,7 @@
       (update-head (first knots) (first x))
       (dotimes (j (1- (length knots)))  ; update all the knots following head
 	(update-follower (nth j knots) (nth (1+ j) knots))
-	(when (or (= j 0) (= j 8))  ; we're interested in knots after indexes 0 and 8
+	(when (or (= j 0) (= j 8))  ; we're interested in knots after 0 and 8
 	  (pushnew (list (knot-r (nth (1+ j) knots)) (knot-c (nth (1+ j) knots)))
 		   (knot-seen (nth (1+ j) knots))
 		   :test 'equal))))))
