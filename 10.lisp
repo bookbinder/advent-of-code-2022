@@ -20,6 +20,7 @@
 			      (group (nreverse display) 40))))
     (when (= 20 (mod i 40))
       (incf total (* i (car L))))
-    (if (<= (abs (- (mod (1- i) 40) (car L))) 1)
-	(push "#" display)
-	(push " " display))))
+    (push (if (<= (abs (- (mod (1- i) 40) (car L))) 1)
+	      "#"
+	      " ")
+	  display)))
