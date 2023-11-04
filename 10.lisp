@@ -15,8 +15,7 @@
   (do ((i 1 (1+ i))
        (L vals (cdr L)))
       ((null L) (list total
-		      (mapcar #'(lambda (x)
-				  (format nil "~&~{~A~}" x))
+		      (mapcar #'(lambda (x) (format nil "~{~A~}" x))
 			      (group (nreverse display) 40))))
     (when (= 20 (mod i 40))
       (incf total (* i (car L))))
