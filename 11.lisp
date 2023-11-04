@@ -15,18 +15,19 @@
 
 (defun monkey-business (L)
   "The product of number of throws of two most active monkeys."
-  (reduce #'*
-	  (subseq (sort (mapcar #'(lambda (x) (monkey-cnt x)) L) #'>) 0 2)))
+  (reduce #'* (subseq (sort (mapcar #'(lambda (x) (monkey-cnt x)) L) #'>) 0 2)))
 
 (defun simulate (monkeys n div)
   "Run simulation N times with divisor DIV"
-  (let ((prod (reduce #'* (mapcar #'(lambda (x) (first (monkey-throw x))) monkeys))))
+  (let ((prod (reduce #'* (mapcar #'(lambda (x) (first (monkey-throw x)))
+				  monkeys))))
     (dotimes (i n (monkey-business monkeys))  ; number of rounds
       (dolist (m monkeys)  ; for each monkey
 	(dolist (it (monkey-items m))  ; for each item monkey is carrying
-	  (let ((new-level (mod
-			    (floor (funcall (monkey-op m) (pop (monkey-items m))) div)
-			    prod)))
+	  (let ((new-level
+		  (mod (floor (funcall (monkey-op m) (pop (monkey-items m)))
+			      div)
+		       prod)))
 	    (incf (monkey-cnt m))
 	    (if (= 0 (mod new-level (first (monkey-throw m))))
 		(push new-level
