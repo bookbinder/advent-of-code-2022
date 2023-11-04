@@ -21,19 +21,20 @@
   "Run simulation N times with divisor DIV"
   (let ((prod (reduce #'* (mapcar #'(lambda (x) (first (monkey-throw x)))
 				  monkeys))))
-    (dotimes (i n (monkey-business monkeys))  ; number of rounds
-      (dolist (m monkeys)  ; for each monkey
-	(dolist (it (monkey-items m))  ; for each item monkey is carrying
+    (dotimes (_ n (monkey-business monkeys))  ; number of rounds
+      (dolist (m monkeys)                     ; for each monkey
+	(dolist (it (monkey-items m))         ; for each item monkey is carrying
 	  (let ((new-level
 		  (mod (floor (funcall (monkey-op m) (pop (monkey-items m)))
 			      div)
 		       prod)))
 	    (incf (monkey-cnt m))
-	    (if (= 0 (mod new-level (first (monkey-throw m))))
-		(push new-level
-		      (monkey-items (nth (second (monkey-throw m)) monkeys)))
-		(push new-level
-		      (monkey-items (nth (third (monkey-throw m)) monkeys))))))))))
+	    (push new-level
+		  (monkey-items (nth
+				 (if (= 0 (mod new-level (first (monkey-throw m))))
+				     (second (monkey-throw m))
+				     (third (monkey-throw m)))
+				 monkeys)))))))))
 
 ;; Answers for parts 1 and 2:
 (let ((input (parse "data/11.txt" #'pars #'lines)))
