@@ -16,7 +16,7 @@
 	(length L))))
 
 (defun scenic-score (cur L)
-  "Scenic score as a product of viewing distances along 4 axes."
+  "Scenic score as a product of viewing distances along 4 directions."
   (reduce #'* (mapcar #'(lambda (x) (viewing-distance cur x))
 		      L)))
 
