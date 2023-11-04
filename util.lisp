@@ -2,6 +2,8 @@
 
 (proclaim '(inline last1 single append1 conc1 mklist))
 
+(defconstant inf (truncate 9e15))
+
 (defun last1 (lst)
   "Return last elt as an atom, not a list."
   (car (last lst)))
