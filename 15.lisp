@@ -7,8 +7,8 @@
 (defun nei (x y dist row)
   "Range of columns in ROW that can't hold a beacon, assuming no beacons
 within Manhattan DIST of X Y."
-  (let* ((diff (abs (- y row)))
-	(width (- dist diff)))
+  (let* ((diff  (abs (- y row)))
+	 (width (- dist diff)))
     (when (<= diff dist)
       (list (- x width) (+ x width)))))
 
@@ -21,9 +21,7 @@ within Manhattan DIST of X Y."
 
 (defun sum-ranges (L)
   "Total space occupied by all the ranges in L."
-  (if (null L)
-      0
-      (+ (- (second (car L)) (first (car L))) 1 (sum-ranges (cdr L)))))
+  (sum (mapcar #'(lambda (x) (+ 1 (- (second x) (first x)))) L)))
 
 (defun beacons-in-range (beacons L row)
   "How many beacons are in one of the ranges of L at ROW?"
