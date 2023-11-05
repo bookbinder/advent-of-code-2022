@@ -62,7 +62,7 @@ between 0 and MX."
      (- (sum-ranges ranges)
 	(beacons-in-range beacons ranges row)))
    
-   ;; part 2 (Currently takes a few seconds. Can it be sped up?)
+   ;; part 2 (Currently takes 4 seconds. Can it be sped up?)
    (dotimes (i mx)
-     (let ((res (gaps (ranges-in-row input i) mx)))
-       (when res (return (+ (* res 4000000) i)))))))
+     (when-bind (res (gaps (ranges-in-row input i) mx))
+       (return (+ (* res 4000000) i))))))

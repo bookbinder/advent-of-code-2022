@@ -300,7 +300,7 @@ unless it's \d-\d which would indicate two separate ints."
      (format t "~%~%")
      (values)))
 
-(defmacro while (test &rest body)
+(defmacro while (test &body body)
   "Somewhat unneccessary macro when we can just use do."
   `(do () ((not ,test)) ,@body))
 
@@ -377,3 +377,8 @@ integer format."
   "Convert a 2d list to a 2d array."
   (make-array (list (length L) (length (first L)))
 	      :initial-contents L))
+
+(defmacro when-bind ((var my-expr) &body body)
+  `(let ((,var ,my-expr))
+     (when ,var
+       ,@body)))
