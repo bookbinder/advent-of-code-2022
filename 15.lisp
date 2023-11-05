@@ -54,8 +54,7 @@ between 0 and MX."
 		 (mapcar #'(lambda (x) (list (third x) (fourth x))) input)
 		 :test 'equal))
        (row     (if (> (length input) 14) 2000000 10))
-       (mx      (if (> (length input) 14) 4000000 20))
-       res)
+       (mx      (if (> (length input) 14) 4000000 20)))
 
   (list
    ;; part 1
