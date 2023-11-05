@@ -35,6 +35,7 @@ within Manhattan DIST of X Y."
 	    beacons))
 
 (defun ranges-in-row (input row &aux res)
+  "Return a list of ranges in ROW where no beacon is possible."
   (dolist (z input (combine-ranges (sort res #'< :key 'car)))
     (destructuring-bind (a b c d) z
       (let ((range (nei a b (md a b c d) row)))
