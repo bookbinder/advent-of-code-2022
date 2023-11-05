@@ -281,8 +281,9 @@ E.g. (setq our-copy-tree (ttrav #'cons)) and then (funcall our-copy-tree (tree..
     #'self))
 
 (defun ints (s)
-  "Return a list of all the integers in string S"
-  (mapcar #'parse-integer (cl-ppcre:all-matches-as-strings "\\d+" s)))
+  "Return a list of all the integers in string S including negatives
+unless it's \d-\d which would indicate two separate ints."
+  (mapcar #'parse-integer (cl-ppcre:all-matches-as-strings "(?<!\\d)(-)*\\d+" s)))
 
 (defmacro ppmx (form)
   "Pretty-prints the macro expansion of FORM."
