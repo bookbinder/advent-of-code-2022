@@ -1,14 +1,22 @@
 (load "util.lisp")
 
-(defun expand-rocks (line)
-  "Update *grid* with rock ranges in a line of input."
-  (do ((arr line (cddr arr)))
-      ((null (cddr arr)))
-    (destructuring-bind (x1 y1 x2 y2) (subseq arr 0 4)
-      (do ((x x1 (incf x (signum (- x2 x1))))
-	   (y y1 (incf y (signum (- y2 y1)))))
-	  ((and (= x x2) (= y y2)) (setf (aref *grid* y x) t))
-	(setf (aref *grid* y x) t)))))
+(defun create-grid (input rr cc)
+  "Create a 2d array based on INPUT that can be used for both parts 1 and 2."
+  (let* ((grid (make-array (list (+ 3 rr) (+ 20 cc rr))
+			   :initial-element nil)))
+    (flet ((expand-rocks (line)
+	     "Update grid with rock ranges in a LINE of input."
+	     (do ((arr line (cddr arr)))
+		 ((null (cddr arr)))
+	       (destructuring-bind (x1 y1 x2 y2) (subseq arr 0 4)
+		 (do ((x x1 (incf x (signum (- x2 x1))))
+		      (y y1 (incf y (signum (- y2 y1)))))
+		     ((and (= x x2) (= y y2)) (setf (aref grid y x) t))
+		   (setf (aref grid y x) t))))))
+      (mapc #'expand-rocks input)
+      (dotimes (i (+ 20 cc rr))  ; create floor
+	(setf (aref grid (+ rr 2) i) t)))
+    grid))
 
 (defun maxes (input axis)
   "Return max value along axis."
@@ -38,20 +46,14 @@ lowest obstacle."
 
 
 (let* ((input (parse "data/14.txt" #'lines #'ints))
-       (rr (maxes input 'y))
-       (cc (maxes input 'x))
-       (part1 0)
-       (part2 0))
-  ;; set up *grid* for part 1
-  (defparameter *grid* (make-array (list (+ 2 rr) (+ 2 cc)) :initial-element nil))
-  (mapc #'expand-rocks input)
-  (setf part1 (do ((i 0 (1+ i)))
-		  ((null (drop rr)) i)))
-  ;; set up *grid* for part 2
-  (defparameter *grid* (make-array (list (+ 3 rr) (+ 20 cc rr)) :initial-element nil))
-  (mapc #'expand-rocks input)
-  (dotimes (i (+ 20 cc rr))  ; create floor
-    (setf (aref *grid* (+ rr 2) i) t))
-  (setf part2 (do ((i 0 (1+ i)))
-		  ((null (drop inf)) i)))
-  (list part1 part2))
+       (rr    (maxes input 'y))
+       (cc    (maxes input 'x)))
+  ;; Return answers for parts 1 and 2:
+  (list (progn
+	  (defparameter *grid* (create-grid input rr cc))
+	  (do ((i 0 (1+ i)))
+	      ((null (drop rr)) i)))
+	(progn
+	  (defparameter *grid* (create-grid input rr cc))
+	  (do ((i 0 (1+ i)))
+	      ((null (drop inf)) i)))))
