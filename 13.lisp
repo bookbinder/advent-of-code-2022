@@ -29,14 +29,10 @@
     (< (rec a b) 0)))
 
 (let* ((input (parse "data/13.txt" #'pars #'lines #'my-eval))
-       (part1 0))
-  (do ((i 1 (1+ i))
-       (arr input (cdr arr)))
-      ((null arr))
-    (when (compare (first (car arr)) (second (car arr)))
-      (incf part1 i)))
-  (let ((part2 (sort (apply #'append '(((2))) '(((6))) input) #'compare)))
-    ;; Return answers for parts 1 and 2:
-    (list part1
-	  (* (1+ (position '((6)) part2 :test 'equal))
-	     (1+ (position '((2)) part2 :test 'equal))))))
+       (part1 (sum (loop for z in input and idx from 1
+			 collect (if (compare (first z) (second z)) idx 0))))
+       (part2 (sort (apply #'append '(((2))) '(((6))) input) #'compare)))
+  ;; Return answers for parts 1 and 2:
+  (list part1
+	(* (1+ (position '((6)) part2 :test 'equal))
+	   (1+ (position '((2)) part2 :test 'equal)))))
