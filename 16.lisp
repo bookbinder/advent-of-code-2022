@@ -1,4 +1,4 @@
-;;;; currently takes about 20s
+;;;; currently takes about 30s
 
 (load "util.lisp")
 
@@ -79,9 +79,9 @@
 
   (list
    ;; part 1
-   (progn (clear-cache)
-	  (dfs 'aa 0 0 0)
-	  (apply #'max (mapcar #'second (get-cache2))))
+   (progn
+     (clear-cache)
+     (dfs 'aa 0 0 0))
    ;; part 2
    (progn
      (let* ((best 0) res)
