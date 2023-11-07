@@ -46,7 +46,7 @@
 				     input))
   ;; In the property list of each symbol, list the flow-rate (:rate),
   ;; immediate neighbors (:nei), bit position lookup (:pos); and the
-  ;; shortest distance to every other symbol (get 'aa 'jj) = 2.
+  ;; shortest distance to every other symbol, e.g. (get 'aa 'jj) = 2.
   (do ((arr input (cdr arr))
        (i 0 (1+ i)))
       ((null arr))
@@ -70,12 +70,11 @@
   (list
    ;; part 1
    (apply #'max (mapcar #'second (dfs 'aa 0 0 0)))
-   ;; part 2
-   (let ((best 0))
-     (do ((x (dfs 'aa 4 0 0) (cdr x))
-	  (best 0))
-	 ((null (cdr x)) best)
-       (do ((y (cdr x) (cdr y)))
-	   ((null y))
-	 (when (zerop (logand (first (first x)) (first (first y))))
-	   (setf best (max best (+ (second (first x)) (second (first y)))))))))))))
+   ;; part 2 (get the max of disjoint pair sums)
+   (do ((x (dfs 'aa 4 0 0) (cdr x))
+	(best 0))
+       ((null (cdr x)) best)
+     (do ((y (cdr x) (cdr y)))
+	 ((null y))
+       (when (zerop (logand (first (first x)) (first (first y))))
+	 (setf best (max best (+ (second (first x)) (second (first y))))))))))))
