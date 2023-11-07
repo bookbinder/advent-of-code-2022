@@ -1,4 +1,4 @@
-;;;; currently takes about 30s
+;;;; currently takes about 15s
 
 (load "util.lisp")
 
@@ -23,31 +23,21 @@
   "Add valve to num representing seen."
   (logior (expt 2 (get valve :pos)) num))
 
-(let ((cache (make-hash-table :test 'equal))
-      cache2)
+(let (cache)
   (defun dfs (current time total opened)
-    "Search all paths and return max."
-    (when-bind (val (gethash (list current time total opened) cache))
-      (return-from dfs val))
-    (let ((mx (+ total (* (get-flow opened) (- 30 time)))))
-      (push (list opened mx) cache2)
+    "Search all paths and save results in cache: (valves-opened pressure-released)"
+    (let ((new-total (+ total (* (get-flow opened) (- 30 time)))))
+      (push (list opened new-total) cache)
       (dolist (x *candidates*)
 	(unless (valve-in-seen x opened)
-	  (let (value time-delta)
-	    (setf time-delta (1+ (get current x)))
+	  (let ((time-delta (1+ (get current x))))
 	    (when (< (+ time time-delta) 30)
-	      (setf value (dfs x
-			       (+ time time-delta)
-			       (+ total (* time-delta (get-flow opened)))
-			       (add-valve x opened)))
-	      (when (> value mx)
-		(setf mx value))))))
-      (setf (gethash (list current time total opened) cache) mx)))
-  (defun clear-cache ()
-    (setf cache (make-hash-table :test 'equal))
-    (setf cache2 nil))
-  (defun get-cache () cache)
-  (defun get-cache2 () cache2))
+	      (dfs x
+		   (+ time time-delta)
+		   (+ total (* time-delta (get-flow opened)))
+		   (add-valve x opened))))))))
+  (defun clear-cache () (setf cache nil))
+  (defun get-cache () cache))
 
 (let* ((input (parse "data/16.txt" #'lines #'matches)))
   (defparameter *valves*     (mapcar #'car input))
@@ -79,16 +69,17 @@
 
   (list
    ;; part 1
-   (progn
+   (let ((res 0))
      (clear-cache)
-     (dfs 'aa 0 0 0))
+     (dfs 'aa 0 0 0)
+     (setf res (get-cache))
+     (apply #'max (mapcar #'second res)))
    ;; part 2
-   (progn
-     (let* ((best 0) res)
-       (clear-cache)
-       (dfs 'aa 4 0 0)
-       (setf res (get-cache2))
-       (dolist (x res best)
-	 (dolist (y res)
-	   (when (zerop (logand (car x) (car y)))
-	     (setf best (max best (+ (second x) (second y)))))))))))
+   (let ((best 0) res)
+     (clear-cache)
+     (dfs 'aa 4 0 0)
+     (setf res (get-cache))
+     (dolist (x res best)
+       (dolist (y res)
+	 (when (zerop (logand (car x) (car y)))
+	   (setf best (max best (+ (second x) (second y))))))))))
