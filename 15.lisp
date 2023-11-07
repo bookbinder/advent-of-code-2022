@@ -13,14 +13,15 @@ within Manhattan DIST of X Y."
       (list (- x width) (+ x width)))))
 
 (defun combine-ranges (L &aux res)
-  "Combine a sorted list of ranges L in case any overlap."
+  "Combine sorted sublists of ranges in L in case any overlap."
   (dolist (z L (nreverse res))
     (if (or (null res) (> (first z) (second (car res))))
 	(push z res)
 	(setf (second (car res)) (max (second (car res)) (second z))))))
 
 (defun sum-ranges (L)
-  "Total space occupied by all the ranges in L."
+  "Total space occupied by all the sublist ranges in L, assuming they're
+sorted and combined."
   (sum (mapcar #'(lambda (x) (+ 1 (- (second x) (first x)))) L)))
 
 (defun beacons-in-range (beacons L row)
@@ -33,14 +34,14 @@ within Manhattan DIST of X Y."
 	    beacons))
 
 (defun ranges-in-row (input row &aux res)
-  "Return a list of ranges in ROW where no beacon is possible."
+  "Return sorted list of ranges in ROW where no beacon is possible."
   (dolist (z input (combine-ranges (sort res #'< :key 'car)))
     (destructuring-bind (a b c d) z
       (let ((range (nei a b (md a b c d) row)))
 	(when range (push range res))))))
 
 (defun gaps (L mx)
-  "Given a list of ranges in L, determine if there are any gaps
+  "Given sublist ranges in L, determine if there are any gaps
 between 0 and MX."
   (cond ((> (first (first L)) 0) 1)
 	((< (second (last1 L)) mx) (1+ (second (last1 L))))
@@ -62,7 +63,7 @@ between 0 and MX."
      (- (sum-ranges ranges)
 	(beacons-in-range beacons ranges row)))
    
-   ;; part 2 (Currently takes 4 seconds. Can it be sped up?)
+   ;; part 2 (Currently takes 4-5 seconds. Can it be sped up?)
    (dotimes (i mx)
      (when-bind (res (gaps (ranges-in-row input i) mx))
        (return (+ (* res 4000000) i))))))
