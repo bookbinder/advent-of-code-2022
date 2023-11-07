@@ -1,4 +1,4 @@
-;;;; currently takes about 15s
+;;;; currently takes about 8s
 
 (load "util.lisp")
 
@@ -23,21 +23,21 @@
   "Add valve to num representing seen."
   (logior (expt 2 (get valve :pos)) num))
 
-(let (cache)
-  (defun dfs (current time total opened)
-    "Search all paths and save results in cache: (valves-opened pressure-released)"
-    (let ((new-total (+ total (* (get-flow opened) (- 30 time)))))
-      (push (list opened new-total) cache)
-      (dolist (x *candidates*)
-	(unless (valve-in-seen x opened)
-	  (let ((time-delta (1+ (get current x))))
-	    (when (< (+ time time-delta) 30)
-	      (dfs x
-		   (+ time time-delta)
-		   (+ total (* time-delta (get-flow opened)))
-		   (add-valve x opened))))))))
-  (defun clear-cache () (setf cache nil))
-  (defun get-cache () cache))
+(defun dfs (current time total opened &aux cache)
+  "Search all paths and save results in cache: (valves-opened pressure-released)"
+  (labels ((rec (current time total opened)
+	     (let ((new-total (+ total (* (get-flow opened) (- 30 time)))))
+	       (push (list opened new-total) cache)
+	       (dolist (x *candidates*)
+		 (unless (valve-in-seen x opened)
+		   (let ((time-delta (1+ (get current x))))
+		     (when (< (+ time time-delta) 30)
+		       (rec x
+			    (+ time time-delta)
+			    (+ total (* time-delta (get-flow opened)))
+			    (add-valve x opened)))))))))
+    (rec current time total opened))
+  (remove-duplicates cache :test 'equal))
 
 (let* ((input (parse "data/16.txt" #'lines #'matches)))
   (defparameter *valves*     (mapcar #'car input))
@@ -69,17 +69,13 @@
 
   (list
    ;; part 1
-   (let ((res 0))
-     (clear-cache)
-     (dfs 'aa 0 0 0)
-     (setf res (get-cache))
-     (apply #'max (mapcar #'second res)))
+   (apply #'max (mapcar #'second (dfs 'aa 0 0 0)))
    ;; part 2
-   (let ((best 0) res)
-     (clear-cache)
-     (dfs 'aa 4 0 0)
-     (setf res (get-cache))
-     (dolist (x res best)
-       (dolist (y res)
-	 (when (zerop (logand (car x) (car y)))
-	   (setf best (max best (+ (second x) (second y))))))))))
+   (let ((best 0))
+     (do ((x (dfs 'aa 4 0 0) (cdr x))
+	  (best 0))
+	 ((null (cdr x)) best)
+       (do ((y (cdr x) (cdr y)))
+	   ((null y))
+	 (when (zerop (logand (first (first x)) (first (first y))))
+	   (setf best (max best (+ (second (first x)) (second (first y)))))))))))))
