@@ -3,7 +3,7 @@
 (load "util.lisp")
 
 (defun matches (line)
-  "Find valve names and flow rates and convert them to symbols and ints."
+  "Find valve names and flow rates in LINE and convert them to symbols and ints."
   (destructuring-bind (a b . c)
       (cl-ppcre:all-matches-as-strings "([A-Z]{2}|\\d+)" line)
     (append (list (intern a) (parse-integer b)) (mapcar #'intern c))))
@@ -16,15 +16,15 @@
 	(incf total (get (nth i *valves*) :rate))))))
 
 (defun valve-in-seen (valve num)
-  "Return whether valve is in the num representing seen."
+  "Return whether VALVE is in the NUM representing seen."
   (logtest (expt 2 (get valve :pos)) num))
 
 (defun add-valve (valve num)
-  "Add valve to num representing seen."
+  "Add valve to NUM representing SEEN."
   (logior (expt 2 (get valve :pos)) num))
 
 (defun dfs (current time total opened &aux cache)
-  "Search all paths and save results in cache: (valves-opened pressure-released)"
+  "Search all paths and save results in CACHE: (valves-opened pressure-released)"
   (labels ((rec (current time total opened)
 	     (let ((new-total (+ total (* (get-flow opened) (- 30 time)))))
 	       (push (list opened new-total) cache)
@@ -39,7 +39,7 @@
     (rec current time total opened))
   (remove-duplicates cache :test 'equal))
 
-(let* ((input (parse "data/16.txt" #'lines #'matches)))
+(let ((input (parse "data/16.txt" #'lines #'matches)))
   (defparameter *valves*     (mapcar #'car input))
   (defparameter *candidates* (filter #'(lambda (x)
 					 (when (plusp (second x)) (car x)))
