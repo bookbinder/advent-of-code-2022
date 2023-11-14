@@ -1,7 +1,7 @@
 (load "util.lisp")
 
 (defun normalize-input (input)
-  "Normalize coordinates so that (0 0 0) is a frame of reference for
+  "Normalize coordinates so that (0 0 0) is just outside
 the bottome left front, and then return normalized coordinates
 and a 3d array."
   (let* ((ranges (loop for i in input
