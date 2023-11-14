@@ -81,13 +81,13 @@ repetition, return values at the 2 indices, otherwise nil."
 (defparameter *max-rocks* 1000000000000)
 
 
-(let* ((n     3000)  ; max number of rocks to drop
+(let* ((n     2022)  ; max number of rocks to drop
        (grid  (make-array (list (+ 10 (* n 4)) 7) :initial-element 0))
        (mx    (first (array-dimensions grid)))
        (j     0)     ; wind count
        (cycle nil)   ; have we encountered a repition of the signature yet?
        (part1 nil)
-       (sig (signature))
+       (sig   (signature))
        rock-heights)
   (dotimes (i n (list part1 "cycle not found"))
     (let ((val (drop grid i j mx cycle sig)))
