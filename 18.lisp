@@ -5,24 +5,23 @@
 the bottome left front, and then return normalized coordinates
 and a 3d array."
   (let* ((ranges (loop for i in input
-		       minimizing (first i) into x-min
-		       maximizing (first i) into x-max
+		       minimizing (first i)  into x-min
+		       maximizing (first i)  into x-max
 		       minimizing (second i) into y-min
 		       maximizing (second i) into y-max
-		       minimizing (third i) into z-min
-		       maximizing (third i) into z-max
+		       minimizing (third i)  into z-min
+		       maximizing (third i)  into z-max
 		       finally (return (list x-min x-max
 					     y-min y-max
 					     z-min z-max))))
 	 (grid   (make-array (list (+ 3 (- (second ranges) (first ranges)))
 				   (+ 3 (- (fourth ranges) (third ranges)))
-				   (+ 3 (- (sixth ranges) (fifth ranges))))
+				   (+ 3 (- (sixth ranges)  (fifth ranges))))
 			     :initial-element 0)))
-    (dolist (x input input)
+    (dolist (x input (values input grid))
       (incf (first x) (- 1 (first ranges)))
       (incf (second x) (- 1 (third ranges)))
-      (incf (third x) (- 1 (fifth ranges))))
-    (dolist (x input (values input grid))
+      (incf (third x) (- 1 (fifth ranges)))
       (setf (aref grid (first x) (second x) (third x)) 1))))
 
 (defun neighbors (pt)
